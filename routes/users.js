@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var model = require('../model');
 
 //获取注册表单
 router.get('/reg', function(req, res, next) {
@@ -9,7 +9,22 @@ router.get('/reg', function(req, res, next) {
 });
 //提交注册表单
 router.post('/reg', function(req, res, next) {
-  res.send('提交注册表单');
+  var user = req.body;
+  //如果说密码和重复密码不一致，则退回上一个页面
+  if(user.password != user.repassword){
+    return res.redirect('back');
+  }
+  //删除不需要持久化的重复密码字段
+  delete user.repassword;
+  //把它保存到数据库中
+  model.user.create(user,function(err,doc){
+    if(err){
+      return res.redirect('back');
+    }else{
+      res.redirect('/');
+    }
+  });
+
 });
 
 //获取登陆表单
