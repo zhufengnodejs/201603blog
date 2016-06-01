@@ -1,14 +1,29 @@
 var express = require('express');
 var router = express.Router();
-//在路由实例中也可以使用中间件
-router.use(function(req,res,next){
-  console.log('user use');
-  next();
+
+
+//获取注册表单
+router.get('/reg', function(req, res, next) {
+  res.send('获取注册表单');
+});
+//提交注册表单
+router.post('/reg', function(req, res, next) {
+  res.send('提交注册表单');
 });
 
-/* 获取用户列表 */
-router.get('/list', function(req, res, next) {
-  res.send('respond with a resource');
+//获取登陆表单
+router.get('/login', function(req, res, next) {
+  res.send('获取登陆表单');
+});
+
+//提交登陆表单
+router.post('/login', function(req, res, next) {
+  res.send('提交登陆表单');
+});
+
+//退出登陆
+router.get('/logout', function(req, res, next) {
+  res.send('退出登陆');
 });
 
 module.exports = router;

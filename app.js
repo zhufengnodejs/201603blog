@@ -14,6 +14,8 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 //用户路由
 var users = require('./routes/users');
+//文章路由
+var articles = require('./routes/articles');
 //生成app
 var app = express();
 
@@ -31,23 +33,23 @@ app.use(bodyParser.json());//处理 application/json
 app.use(bodyParser.urlencoded({ extended: false }));//处理 application/x-www-form-urlencoded
 //解析 cookie 请求头中的cookie转成对象 req.cookies
 app.use(cookieParser());
+//静态文件中间件
 app.use(express.static(path.join(__dirname, 'public')));
+
 //配置首页路由
 app.use('/', routes);
 //配置用户路由
 app.use('/users', users);
+app.use('/articles', articles);
 //捕获404错误并且转向错误处理中间件
-// catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-// error handlers
-
-// development error handler
-// will print stacktrace
+//开发错误处理器将打印出来堆栈异常
+console.log(app.get('env'));
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
@@ -58,8 +60,8 @@ if (app.get('env') === 'development') {
   });
 }
 
-// production error handler
-// no stacktraces leaked to user
+//生产环境中的错误处理
+//不需要把信息泄露给用户
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
