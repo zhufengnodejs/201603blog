@@ -12,6 +12,7 @@ router.post('/reg', function(req, res, next) {
   var user = req.body;
   //如果说密码和重复密码不一致，则退回上一个页面
   if(user.password != user.repassword){
+    req.flash('error','密码和重复密码不一致，请重新填写');
     return res.redirect('back');
   }
   //删除不需要持久化的重复密码字段
@@ -20,9 +21,11 @@ router.post('/reg', function(req, res, next) {
   //把它保存到数据库中
   model.user.create(user,function(err,doc){
     if(err){
+      req.flash('error','注册失败，请重新填写');
       return res.redirect('back');
     }else{
       req.session.user = doc;
+      req.flash('success','恭喜你注册成功');
       res.redirect('/');
     }
   });

@@ -18,6 +18,7 @@ var users = require('./routes/users');
 var articles = require('./routes/articles');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
+var flash = require('connect-flash');
 //生成app
 var app = express();
 
@@ -48,12 +49,17 @@ app.use(session({
 }));
 //静态文件中间件
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(flash());
 //此中间件处理每个模块里都要用的公用的变量
 app.use(function(req,res,next){
   //res.locals它是模板渲染时真正用的数据源对象
   res.locals.user = req.session.user||{};
+  //一旦取值之后会把flash中存放的值删除掉
+  res.locals.success = req.flash('success').toString();
+  res.locals.error = req.flash('error').toString();
   next();
 });
+
 //配置首页路由
 app.use('/', routes);
 //配置用户路由

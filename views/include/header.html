@@ -41,3 +41,9 @@
     </div><!-- /.container-fluid -->
 </nav>
 <div class="container">
+    <%if(error){%>
+    <div class="alert alert-danger"><%=error%></div>
+    <%}%>
+    <%if(success){%>
+    <div class="alert alert-success"><%=success%></div>
+    <%}%>
