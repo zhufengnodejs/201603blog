@@ -44,7 +44,7 @@ app.use(session({
   resave:true,//重新保存
   saveUninitialized:true,//保存未初始化的session
   store:new MongoStore({// 指定会话的数据库存储位置
-    url:'mongodb://localhost:27017/201603blog'
+    url:'mongodb://123.57.143.189:27017/zhufengnodejsblog'
   })
 }));
 //静态文件中间件

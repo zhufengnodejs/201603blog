@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 //1. 连接数据库
-mongoose.connect('mongodb://localhost:27017/201603blog');
+mongoose.connect('mongodb://123.57.143.189:27017/zhufengnodejsblog');
 //2. 定义schema
 var userSchema = new mongoose.Schema({
     username:{type:String},//用户名
