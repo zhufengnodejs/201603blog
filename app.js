@@ -22,7 +22,9 @@ var app = express();
 //设置模板的存放路径
 app.set('views', path.join(__dirname, 'views'));
 //设置模板引擎
-app.set('view engine', 'ejs');
+app.set('view engine', 'html');
+//设置html的模板由ejs引擎来进行渲染
+app.engine('html',require('ejs').__express);
 
 //收藏夹图标的物理文件路径
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
