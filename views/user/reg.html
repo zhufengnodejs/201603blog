@@ -1,3 +1,41 @@
 <%include ../include/header.html%>
-注册
+<form action="" class="col-xs-6 col-xs-offset-2">
+    <div class="form-group">
+        <label class="col-xs-3" for="username">用户名</label>
+        <div class="col-xs-9 input-group">
+            <div class="input-group-addon">
+                <span class="glyphicon glyphicon-user"></span>
+            </div>
+            <input type="text" class="form-control" name="username" id="username">
+        </div>
+
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3" for="email">邮箱</label>
+        <div class="col-xs-9 input-group">
+            <div class="input-group-addon">
+                <span class="glyphicon glyphicon-envelope"></span>
+            </div>
+        <input type="text" class="form-control" name="email" id="email">
+            </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3" for="password">密码</label>
+        <div class="col-xs-9 input-group">
+            <div class="input-group-addon">
+                <span class="glyphicon glyphicon-lock"></span>
+            </div>
+        <input type="text" class="form-control" name="password" id="password">
+            </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3"  for="repassword">重复密码</label>
+        <div class="col-xs-9 input-group">
+            <div class="input-group-addon">
+                <span class="glyphicon glyphicon-lock"></span>
+            </div>
+        <input type="text" class="form-control" name="repassword" id="repassword">
+            </div>
+    </div>
+</form>
 <%include ../include/footer.html%>
