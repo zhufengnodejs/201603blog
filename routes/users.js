@@ -16,17 +16,18 @@ router.post('/reg', function(req, res, next) {
   }
   //删除不需要持久化的重复密码字段
   delete user.repassword;
+  user.avatar = "https://secure.gravatar.com/avatar/"+md5(user.email)+"?s=48";
   //把它保存到数据库中
   model.user.create(user,function(err,doc){
     if(err){
       return res.redirect('back');
     }else{
-      res.redirect('/');
-    }
+      res.redirect('/');}
   });
-
 });
-
+function md5(str){
+  return require('crypto').createHash('md5').update(str).digest('hex');
+}
 //获取登陆表单
 router.get('/login', function(req, res, next) {
   res.render('user/login',{});
