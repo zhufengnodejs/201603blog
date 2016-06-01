@@ -16,6 +16,8 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 //文章路由
 var articles = require('./routes/articles');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 //生成app
 var app = express();
 
@@ -35,9 +37,23 @@ app.use(bodyParser.json());//处理 application/json
 app.use(bodyParser.urlencoded({ extended: false }));//处理 application/x-www-form-urlencoded
 //解析 cookie 请求头中的cookie转成对象 req.cookies
 app.use(cookieParser());
+// req.session
+app.use(session({
+  secret:'zfpx',//加密cookie的密钥
+  resave:true,//重新保存
+  saveUninitialized:true,//保存未初始化的session
+  store:new MongoStore({// 指定会话的数据库存储位置
+    url:'mongodb://localhost:27017/201603blog'
+  })
+}));
 //静态文件中间件
 app.use(express.static(path.join(__dirname, 'public')));
-
+//此中间件处理每个模块里都要用的公用的变量
+app.use(function(req,res,next){
+  //res.locals它是模板渲染时真正用的数据源对象
+  res.locals.user = req.session.user||{};
+  next();
+});
 //配置首页路由
 app.use('/', routes);
 //配置用户路由

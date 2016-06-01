@@ -22,7 +22,9 @@ router.post('/reg', function(req, res, next) {
     if(err){
       return res.redirect('back');
     }else{
-      res.redirect('/');}
+      req.session.user = doc;
+      res.redirect('/');
+    }
   });
 });
 function md5(str){
