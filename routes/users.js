@@ -16,7 +16,7 @@ router.post('/reg', function(req, res, next) {
   }
   //删除不需要持久化的重复密码字段
   delete user.repassword;
-  user.avatar = "https://secure.gravatar.com/avatar/"+md5(user.email)+"?s=48";
+  user.avatar = 'https://s.gravatar.com/avatar/'+md5(user.email)+'?s=80';
   //把它保存到数据库中
   model.user.create(user,function(err,doc){
     if(err){
