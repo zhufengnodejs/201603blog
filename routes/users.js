@@ -4,7 +4,8 @@ var router = express.Router();
 
 //获取注册表单
 router.get('/reg', function(req, res, next) {
-  res.send('获取注册表单');
+  //这是一个相对路径，相对于views目录
+  res.render('user/reg',{});
 });
 //提交注册表单
 router.post('/reg', function(req, res, next) {
@@ -13,7 +14,7 @@ router.post('/reg', function(req, res, next) {
 
 //获取登陆表单
 router.get('/login', function(req, res, next) {
-  res.send('获取登陆表单');
+  res.render('user/login',{});
 });
 
 //提交登陆表单
