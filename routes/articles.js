@@ -21,7 +21,7 @@ router.get('/list/:pageNum/:pageSize',function(req,res){
     }
     //populate表示填充 把user从id转成对象
     model.article.count(query,function(err,count){
-        model.article.find(query).skip((pageNum-1)*pageSize).limit(pageSize).populate('user').exec(function(err,docs){
+        model.article.find(query).sort({createAt:-1}).skip((pageNum-1)*pageSize).limit(pageSize).populate('user').exec(function(err,docs){
             if(err){
                 res.render('index', { title: '首页',articles:[]});
             }else{
@@ -62,6 +62,8 @@ router.post('/add', function(req, res, next) {
       })
   }else{//如果提交过来的表单没有ID的话就是新增
       article.user = req.session.user._id;
+      //因为article中有下划线ID，它是一个空字符串，如果是空字符串的话，mongoose并不会帮我们再自动生成一个新的ID，所以我们必须把这个字段删除掉
+      delete article._id;
       model.article.create(article,function(err,doc){
           if(err){
               res.redirect('back');

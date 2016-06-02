@@ -12,6 +12,9 @@
             </h4>
             <p><%-article.content.length>50?article.content.slice(0,50)+'...':article.content%></p>
         </div>
+        <div class="footer">
+            <span>发表时间:<%=article.createAt.toLocaleString()%></span>
+        </div>
     </div>
 <%})%>
 <nav>
