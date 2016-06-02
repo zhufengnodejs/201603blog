@@ -12,7 +12,7 @@
     </div>
     <div class="panel-body">
         <ul class="list-group">
-            <li class="list-group-item"></li>
+            <li class="list-group-item" ng-repeat="message in messages">{{message}}</li>
         </ul>
     </div>
     <div class="panel-footer">
@@ -35,9 +35,11 @@
         console.log(event.data);
     }
     angular.module('chatMod',[]).controller('chatCtrl',function($scope){
+        $scope.messages = [];
         $scope.send = function(){
 
         }
+
     });
 </script>
 </html>
