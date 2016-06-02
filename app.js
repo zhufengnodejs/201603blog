@@ -31,8 +31,12 @@ app.engine('html',require('ejs').__express);
 
 //收藏夹图标的物理文件路径
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-//使用日志中间件
-app.use(logger('dev'));
+var fs = require('fs');
+// create a write stream (in append mode)
+var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'})
+
+// setup the logger
+app.use(logger('combined', {stream: accessLogStream}))
 //处理请求体
 app.use(bodyParser.json());//处理 application/json
 app.use(bodyParser.urlencoded({ extended: false }));//处理 application/x-www-form-urlencoded
@@ -71,13 +75,13 @@ app.use('/users', users);
 app.use('/articles', articles);
 //捕获404错误并且转向错误处理中间件
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  /*var err = new Error('Not Found');
   err.status = 404;
-  next(err);
+  next(err);*/
+  res.render('404');
 });
 
 //开发错误处理器将打印出来堆栈异常
-console.log(app.get('env'));
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
@@ -90,7 +94,10 @@ if (app.get('env') === 'development') {
 
 //生产环境中的错误处理
 //不需要把信息泄露给用户
+var errorLog = fs.createWriteStream('error.log', {flags: 'a'});
 app.use(function(err, req, res, next) {
+  var meta = '[' + new Date() + '] ' + req.url + '\n';
+  errorLog.write(meta + err.stack + '\n');
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
