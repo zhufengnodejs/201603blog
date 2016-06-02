@@ -67,6 +67,7 @@ app.use('/users', users);
 app.use('/articles', articles);
 //捕获404错误并且转向错误处理中间件
 app.use(function(req, res, next) {
+  console.log(req.url);
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
