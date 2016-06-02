@@ -57,6 +57,10 @@ app.use(function(req,res,next){
   //一旦取值之后会把flash中存放的值删除掉
   res.locals.success = req.flash('success').toString();
   res.locals.error = req.flash('error').toString();
+  //关键字在首页顶部模板中需要用到
+  res.locals.keyword = '';
+  res.locals.pageNum = 1;
+  res.locals.pageSize = 2;
   next();
 });
 
@@ -67,7 +71,6 @@ app.use('/users', users);
 app.use('/articles', articles);
 //捕获404错误并且转向错误处理中间件
 app.use(function(req, res, next) {
-  console.log(req.url);
   var err = new Error('Not Found');
   err.status = 404;
   next(err);

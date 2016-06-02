@@ -2,6 +2,43 @@ var express = require('express');
 var markdown = require('markdown').markdown;
 var router = express.Router();
 var model = require('../model');
+
+router.get('/list/:pageNum/:pageSize',function(req,res){
+    //当前页码
+    var pageNum = parseInt(req.params.pageNum);
+    //每页的条数
+    var pageSize = parseInt(req.params.pageSize);
+    var keyword = req.query.keyword;//提交的关键字
+    var query = {};//搜索对象
+    if(keyword){//如果关键字有值的话
+        var reg = new RegExp(keyword,'i');//创建一个正则表达式
+        query = { //查询对象
+            $or:[//只要有一个匹配就可以
+                {title:reg},
+                {content:reg}
+            ]
+        }
+    }
+    //populate表示填充 把user从id转成对象
+    model.article.count(query,function(err,count){
+        model.article.find(query).skip((pageNum-1)*pageSize).limit(pageSize).populate('user').exec(function(err,docs){
+            if(err){
+                res.render('index', { title: '首页',articles:[]});
+            }else{
+                docs.forEach(function(doc){
+                    doc.content = markdown.toHTML(doc.content);
+                });
+                res.render('index', { title: '首页',
+                    keyword:keyword,//关键字
+                    pageNum:pageNum,//当前页码
+                    pageSize:pageSize, //每页的条数
+                    totalPage:Math.ceil(count/pageSize),//一共多少页
+                    articles:docs});
+            }
+        });
+    });
+
+});
 //获取增加表单
 router.get('/add', function(req, res, next) {
   res.render('article/add',{article:{}});

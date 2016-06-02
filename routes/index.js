@@ -6,32 +6,7 @@ var router = express.Router();
 
 /* 当用户访问/路径的时候，执行此回调函数 */
 router.get('/', function(req, res, next) {
-  var keyword = req.query.keyword;
-  var query = {};
-  if(keyword){
-    var reg = new RegExp(keyword,'i');
-    query = {
-      $or:[
-        {title:reg},
-        {content:reg}
-      ]
-    }
-  }
-  //populate表示填充 把user从id转成对象
-  // {user:{}}
-  model.article.find(query).populate('user').exec(function(err,docs){
-    if(err){
-      res.render('index', { title: '首页',articles:[]});
-    }else{
-      docs.forEach(function(doc){
-        doc.content = markdown.toHTML(doc.content);
-      });
-      res.render('index', { title: '首页',
-        keyword:keyword,
-articles:docs});
-    }
-  });
-
+   res.redirect('/articles/list/1/2');
 });
 
 module.exports = router;
