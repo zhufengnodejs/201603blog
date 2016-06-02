@@ -29,8 +29,17 @@ router.get('/detail/:_id', function(req, res, next) {
             res.render('article/detail',{article:doc});
         }
     })
+});
 
-
+//删除文章
+router.get('/delete/:_id', function(req, res, next) {
+    model.article.remove({_id:req.params._id},function(err,doc){
+        if(err){
+            res.redirect('back');
+        }else{
+          res.redirect('/');
+        }
+    })
 });
 
 module.exports = router;
