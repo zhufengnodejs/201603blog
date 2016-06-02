@@ -1,6 +1,6 @@
 <%include ../include/header.html%>
 <form action="/articles/add" method="post" class="col-xs-6 col-xs-offset-2">
-    <input type="text" name="_id" value="<%=article._id%>">
+    <input type="hidden" name="_id" value="<%=article._id%>">
     <div class="form-group">
         <label class="col-xs-3" for="title">标题</label>
             <input value="<%=article.title%>" type="text" class="form-control" name="title" id="title">
