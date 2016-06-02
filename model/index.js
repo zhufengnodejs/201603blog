@@ -12,9 +12,10 @@ var userSchema = new mongoose.Schema({
 var articleSchema = new mongoose.Schema({
     title:{type:String},//标题
     content:{type:String},//正文
+    pv:{type:Number,default:0},
     createAt:{type:Date,default:new Date()},
     //评论的内容
-    comments:[{user:{type:ObjectId,ref:'user'},content:{type:String},createAt:{type:Date,default:new Date()}}],
+    comments:[{user:{type:ObjectId,ref:'user'},content:{type:String},createAt:{type:Date,default:Date.now()}}],
     //发表时间
     user:{type:ObjectId,ref:'user'} //作者 ref代表这个ID引用的是哪个模型的ID
 });

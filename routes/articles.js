@@ -2,6 +2,7 @@ var express = require('express');
 var markdown = require('markdown').markdown;
 var router = express.Router();
 var model = require('../model');
+var async = require('async');
 
 router.get('/list/:pageNum/:pageSize',function(req,res){
     //当前页码
@@ -20,23 +21,31 @@ router.get('/list/:pageNum/:pageSize',function(req,res){
         }
     }
     //populate表示填充 把user从id转成对象
-    model.article.count(query,function(err,count){
-        model.article.find(query).sort({createAt:-1}).skip((pageNum-1)*pageSize).limit(pageSize).populate('user').exec(function(err,docs){
-            if(err){
-                res.render('index', { title: '首页',articles:[]});
-            }else{
-                docs.forEach(function(doc){
-                    doc.content = markdown.toHTML(doc.content);
-                });
-                res.render('index', { title: '首页',
-                    keyword:keyword,//关键字
-                    pageNum:pageNum,//当前页码
-                    pageSize:pageSize, //每页的条数
-                    totalPage:Math.ceil(count/pageSize),//一共多少页
-                    articles:docs});
-            }
-        });
+    async.parallel([
+        function(cb){
+            model.article.count(query,cb);
+        },
+        function(cb){
+            model.article.find(query).sort({createAt:-1}).skip((pageNum-1)*pageSize).limit(pageSize).populate('user').exec(function(err,docs){
+                if(err){
+                    res.render('index', { title: '首页',articles:[]});
+                }else{
+                    docs.forEach(function(doc){
+                        doc.content = markdown.toHTML(doc.content);
+                    });
+                    cb(err,docs);
+                }
+            });
+        }
+    ],function(err,result){
+        res.render('index', { title: '首页',
+            keyword:keyword,//关键字
+            pageNum:pageNum,//当前页码
+            pageSize:pageSize, //每页的条数
+            totalPage:Math.ceil(result[0]/pageSize),//一共多少页
+            articles:result[1]});
     });
+
 
 });
 //获取增加表单
@@ -77,14 +86,27 @@ router.post('/add', function(req, res, next) {
 
 //显示文章详情
 router.get('/detail/:_id', function(req, res, next) {
-    model.article.findOne({_id:req.params._id}).populate('user').populate('comments.user').exec(function(err,doc){
-        if(err){
-            res.redirect('back');
-        }else{
-            doc.content = markdown.toHTML(doc.content);
-            res.render('article/detail',{article:doc});
+    async.parallel([
+        function(cb){
+            model.article.update({_id:req.params._id},{
+                $inc:{pv:1}
+            },cb);
+        },
+        function(cb){
+            model.article.findOne({_id:req.params._id}).populate('user').populate('comments.user').exec(function(err,doc){
+                if(err){
+                    res.redirect('back');
+                }else{
+                    doc.content = markdown.toHTML(doc.content);
+                    cb(null,doc);
+                }
+            })
         }
-    })
+    ],function(err,result){
+        res.render('article/detail',{article:result[1]});
+    });
+
+
 });
 
 //删除文章
@@ -106,8 +128,8 @@ router.get('/edit/:_id',function(req,res){
 
 //增加注释
 router.post('/comment', function(req, res, next) {
-    console.log(req.body);
     model.article.update({_id:req.body.articleId},{
+        //在comments数组中追加元素
         $push:{comments:{user:req.session.user._id,content:req.body.content}}
     },function(err,doc){
         if(err){
