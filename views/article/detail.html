@@ -11,4 +11,38 @@
         <a href="/articles/delete/<%=article._id%>" class="btn btn-danger">删除</a>
     </div>
 </div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <%article.comments.forEach(function(comment){%>
+        <div class="media">
+            <div class="media-left">
+                <a href="#">
+                    <img class="media-object" src="<%=comment.user.avatar%>" alt="<%=comment.user.username%>">
+                </a>
+            </div>
+            <div class="media-body">
+                <p><%=comment.content%></p>
+            </div>
+            <div class="footer">
+                <span>发表时间:<%=comment.createAt.toLocaleString()%></span>
+            </div>
+        </div>
+        <%})%>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <form method="post" action="/articles/comment">
+            <input type="hidden" name="articleId" value="<%=article._id%>">
+            <div class="form-group">
+                <textarea class="form-control" name="content" id="content" cols="30" rows="10"></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-warning">发表评论</button>
+            </div>
+        </form>
+    </div>
+</div>
 <%include ../include/footer.html%>

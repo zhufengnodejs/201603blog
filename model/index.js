@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var ObjectId = mongoose.Schema.Types.ObjectId;
 //1. 连接数据库
 mongoose.connect('mongodb://123.57.143.189:27017/zhufengnodejsblog');
 //2. 定义schema
@@ -11,8 +12,11 @@ var userSchema = new mongoose.Schema({
 var articleSchema = new mongoose.Schema({
     title:{type:String},//标题
     content:{type:String},//正文
-    createAt:{type:Date,default:new Date()}, //发表时间
-    user:{type:mongoose.Schema.Types.ObjectId,ref:'user'} //作者 ref代表这个ID引用的是哪个模型的ID
+    createAt:{type:Date,default:new Date()},
+    //评论的内容
+    comments:[{user:{type:ObjectId,ref:'user'},content:{type:String},createAt:{type:Date,default:new Date()}}],
+    //发表时间
+    user:{type:ObjectId,ref:'user'} //作者 ref代表这个ID引用的是哪个模型的ID
 });
 //3. 定义模型
 var userModel = mongoose.model('user',userSchema);

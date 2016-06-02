@@ -77,7 +77,7 @@ router.post('/add', function(req, res, next) {
 
 //显示文章详情
 router.get('/detail/:_id', function(req, res, next) {
-    model.article.findById(req.params._id,function(err,doc){
+    model.article.findOne({_id:req.params._id}).populate('user').populate('comments.user').exec(function(err,doc){
         if(err){
             res.redirect('back');
         }else{
@@ -103,5 +103,22 @@ router.get('/edit/:_id',function(req,res){
         res.render('article/add',{article:doc});
     });
 });
+
+//增加注释
+router.post('/comment', function(req, res, next) {
+    console.log(req.body);
+    model.article.update({_id:req.body.articleId},{
+        $push:{comments:{user:req.session.user._id,content:req.body.content}}
+    },function(err,doc){
+        if(err){
+            req.flash('error',err.toString());
+            res.redirect('back');
+        }else{
+            req.flash('success','评论成功');
+            res.redirect('/articles/detail/'+req.body.articleId);
+        }
+    });
+});
+
 
 module.exports = router;
