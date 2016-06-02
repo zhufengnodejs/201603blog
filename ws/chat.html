@@ -27,17 +27,23 @@
     var socket = new WebSocket('ws://localhost:9090');
     //当连接建立时执行回调
     socket.onopen = function(){
-        socket.send('hello server!');
+     //   socket.send('hello server!');
     }
-    //监听服务器返回的消息
-    socket.onmessage = function(event){
-        //event事件对象 event.data 就是消息
-        console.log(event.data);
-    }
+
     angular.module('chatMod',[]).controller('chatCtrl',function($scope){
         $scope.messages = [];
         $scope.send = function(){
+            socket.send($scope.message);
+        }
 
+        //监听服务器返回的消息
+        socket.onmessage = function(event){
+            console.log(event.data);
+            $scope.$apply(function(){
+                $scope.messages.push(event.data);
+            });
+
+            console.log($scope.messages);
         }
 
     });
