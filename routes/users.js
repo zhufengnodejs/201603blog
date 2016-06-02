@@ -41,7 +41,15 @@ router.get('/login',ware.checkNotLogin, function(req, res, next) {
 
 //提交登陆表单
 router.post('/login',ware.checkNotLogin, function(req, res, next) {
-  res.send('提交登陆表单');
+  var user = req.body;
+  model.user.findOne(user,function(err,doc){
+    if(doc){
+      req.session.user = doc;
+      res.redirect('/');
+    }else{
+      res.redirect('back');
+    }
+  });
 });
 
 //退出登陆
