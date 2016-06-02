@@ -1,3 +1,20 @@
 <%include ../include/header.html%>
-发表文章
+<form action="/articles/add" method="post" class="col-xs-6 col-xs-offset-2">
+    <div class="form-group">
+        <label class="col-xs-3" for="title">标题</label>
+            <input type="text" class="form-control" name="title" id="title">
+    </div>
+
+    <div class="form-group">
+        <label class="col-xs-3" for="content">正文</label>
+            <textarea class="form-control" name="content" id="content" cols="30" rows="10"></textarea>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3">
+            <button class="btn btn-primary" type="submit">提交</button>
+            <button class="btn btn-warning" type="reste">重置</button>
+        </div>
+    </div>
+</form>
 <%include ../include/footer.html%>
