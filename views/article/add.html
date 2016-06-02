@@ -1,13 +1,14 @@
 <%include ../include/header.html%>
 <form action="/articles/add" method="post" class="col-xs-6 col-xs-offset-2">
+    <input type="text" name="_id" value="<%=article._id%>">
     <div class="form-group">
         <label class="col-xs-3" for="title">标题</label>
-            <input type="text" class="form-control" name="title" id="title">
+            <input value="<%=article.title%>" type="text" class="form-control" name="title" id="title">
     </div>
 
     <div class="form-group">
         <label class="col-xs-3" for="content">正文</label>
-            <textarea class="form-control" name="content" id="content" cols="30" rows="10"></textarea>
+            <textarea class="form-control" name="content" id="content" cols="30" rows="10"><%=article.content%></textarea>
     </div>
 
     <div class="form-group">
