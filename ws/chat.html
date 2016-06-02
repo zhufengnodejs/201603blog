@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="chatMod">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body>
+<div class="panel-default" ng-controller="chatCtrl">
+    <div class="panel-heading">
+        <h1>欢迎来到聊天室</h1>
+    </div>
+    <div class="panel-body">
+        <ul class="list-group">
+            <li class="list-group-item"></li>
+        </ul>
+    </div>
+    <div class="panel-footer">
+        <input type="text" class="form-control" ng-model="message">
+        <button class="btn btn-primary" ng-click="send()">发言</button>
+    </div>
+</div>
+</body>
+<script src="//cdn.bootcss.com/angular.js/1.4.0-beta.3/angular.js"></script>
+<script>
+    //创建socket对象
+    var socket = new WebSocket('ws://localhost:9090');
+    //当连接建立时执行回调
+    socket.onopen = function(){
+        socket.send('hello server!');
+    }
+    //监听服务器返回的消息
+    socket.onmessage = function(event){
+        //event事件对象 event.data 就是消息
+        console.log(event.data);
+    }
+    angular.module('chatMod',[]).controller('chatCtrl',function($scope){
+        $scope.send = function(){
+
+        }
+    });
+</script>
+</html>
